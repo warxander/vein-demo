@@ -4,9 +4,8 @@ local labelWidth = 0.1
 local vein = exports.vein
 
 local function drawLabel(text)
-	vein:pushWidgetWidth(labelWidth)
+	vein:setNextWidgetWidth(labelWidth)
 	vein:label(text)
-	vein:popWidgetWidth()
 end
 
 local function showVeinDemo()
@@ -48,9 +47,8 @@ local function showVeinDemo()
 		vein:beginRow()
 			drawLabel('Label')
 
-			vein:pushTextEntry('STRING', 'Welcome to Vein')
+			vein:setNextTextEntry('STRING', 'Welcome to Vein')
 			vein:label()
-			vein:popTextEntry()
 		vein:endRow()
 
 		vein:beginRow()
