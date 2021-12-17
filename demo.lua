@@ -1,7 +1,7 @@
 local controlWidth = 0.13
 local labelWidth = 0.1
 
-local vein
+local vein = exports.vein
 
 local function drawLabel(text)
 	vein:pushWidgetWidth(labelWidth)
@@ -15,14 +15,13 @@ local function showVeinDemo()
 	local floatValue = 0.
 	local textValue = ''
 
-	if not vein then
-		vein = exports.vein
-	end
+	local windowX
+	local windowY
 
 	while true do
 		Citizen.Wait(0)
 
-		vein:beginWindow()
+		vein:beginWindow(windowX, windowY)
 
 		vein:heading('Heading')
 
@@ -82,10 +81,8 @@ local function showVeinDemo()
 		vein:beginRow()
 			drawLabel('SpriteButton')
 
-			vein:pushTextEntry('STRING', 'Toggle Color Theme')
-
 			RequestStreamedTextureDict('mphud')
-			if vein:spriteButton('mphud', 'spectating') then
+			if vein:spriteButton('mphud', 'spectating', 'Toggle Color Theme') then
 				isDarkMode = not isDarkMode
 				if isDarkMode then
 					vein:setDarkColorTheme()
@@ -93,8 +90,6 @@ local function showVeinDemo()
 					vein:setLightColorTheme()
 				end
 			end
-
-			vein:popTextEntry()
 		vein:endRow()
 
 		vein:beginRow()
@@ -109,7 +104,7 @@ local function showVeinDemo()
 			break
 		end
 
-		vein:endWindow()
+		windowX, windowY = vein:endWindow()
 	end
 end
 
