@@ -16,8 +16,9 @@ local function showVeinDemo()
 
 	local windowX
 	local windowY
+	local isWindowOpened = true
 
-	while true do
+	while isWindowOpened do
 		Citizen.Wait(0)
 
 		vein:beginWindow(windowX, windowY)
@@ -99,7 +100,7 @@ local function showVeinDemo()
 		vein:spacing()
 
 		if vein:button('Close') then
-			break
+			isWindowOpened = false
 		end
 
 		windowX, windowY = vein:endWindow()
