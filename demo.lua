@@ -1,4 +1,4 @@
-local controlWidth = 0.13
+local controlWidth = 0.133
 local labelWidth = 0.1
 
 local vein = exports.vein
@@ -74,7 +74,7 @@ local function showVeinDemo()
 			drawLabel('Sprite')
 
 			RequestStreamedTextureDict('shopui_title_barber3')
-			vein:sprite('shopui_title_barber3', 'shopui_title_barber3', 0.133, 0.059)
+			vein:sprite('shopui_title_barber3', 'shopui_title_barber3', controlWidth, 0.059)
 		vein:endRow()
 
 		vein:beginRow()
@@ -89,6 +89,12 @@ local function showVeinDemo()
 					vein:setLightColorTheme()
 				end
 			end
+		vein:endRow()
+
+		vein:beginRow()
+			drawLabel('TextArea')
+
+			vein:textArea('FiveM is the original community-driven and source-available GTA V multiplayer modification project.', controlWidth)
 		vein:endRow()
 
 		vein:beginRow()
