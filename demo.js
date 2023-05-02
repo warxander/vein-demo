@@ -14,7 +14,7 @@
 	let floatValue = 0;
 	let textValue = '';
 
-	let windowPos = {};
+	let windowPos = { x: 0.5, y: 0.5 };
 	let isWindowOpened = false;
 
 	const showVeinDemo = async function (windowTick) {
