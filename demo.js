@@ -14,7 +14,7 @@
 	let floatValue = 0;
 	let textValue = '';
 
-	let windowPos = { x: 0.5, y: 0.5 };
+	let windowPos = { };
 	let isWindowOpened = false;
 
 	const showVeinDemo = async function (windowTick) {
@@ -23,7 +23,7 @@
 			return;
 		}
 
-		vein.beginWindow(windowPos);
+		vein.beginWindow(windowPos.x, windowPos.y);
 
 		vein.heading('Heading');
 
