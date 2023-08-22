@@ -1,20 +1,22 @@
 (function () {
+	const vein = exports.vein;
+
 	const controlWidth = 0.133;
 	const labelWidth = 0.1;
 
-	const vein = exports.vein;
-
 	const drawLabel = function (text) {
-		vein.setNextWidgetWidth(labelWidth);
+		vein.setNextItemWidth(labelWidth);
 		vein.label(text);
 	};
 
+	let holoStyleSheet;
+
 	let checked = false;
-	let isDarkMode = true;
+	let isHoloStyle = false;
 	let floatValue = 0;
 	let textValue = '';
 
-	let windowPos = { };
+	let windowPos = {};
 	let isWindowOpened = false;
 
 	const showVeinDemo = async function (windowTick) {
@@ -82,10 +84,10 @@
 		drawLabel('SpriteButton');
 
 		RequestStreamedTextureDict('mphud');
-		if (vein.spriteButton('mphud', 'spectating', 'Toggle Color Theme')) {
-			isDarkMode = !isDarkMode;
-			if (isDarkMode) vein.setDarkColorTheme();
-			else vein.setLightColorTheme();
+		if (vein.spriteButton(isHoloStyle ? 'holo' : 'mphud', isHoloStyle ? 'light' : 'spectating', 'Toggle Style')) {
+			isHoloStyle = !isHoloStyle;
+			if (isHoloStyle) vein.setStyleSheet(holoStyleSheet);
+			else vein.useDefaultStyle();
 		}
 		vein.endRow();
 
@@ -114,6 +116,81 @@
 
 	on('onClientResourceStart', function (resourceName) {
 		if (resourceName != GetCurrentResourceName()) return;
+
+		const txd = CreateRuntimeTxd('holo');
+		CreateRuntimeTextureFromImage(txd, 'button', 'holo/button.png');
+		CreateRuntimeTextureFromImage(txd, 'button_hover', 'holo/button_hover.png');
+		CreateRuntimeTextureFromImage(txd, 'light', 'holo/light.png');
+		CreateRuntimeTextureFromImage(txd, 'window', 'holo/window.png');
+		RequestStreamedTextureDict('holo');
+
+		const fontFileName = 'roboto';
+		RegisterFontFile(fontFileName);
+		const fontId = RegisterFontId(fontFileName);
+
+		holoStyleSheet = `text-edit {
+			background-color: rgba(45, 49, 50, 1.0);
+			font-family: ${fontId};
+		}
+
+		button, sprite-button {
+			background-color: rgba(254, 254, 254, 1.0);
+			background-image: url('holo', 'button');
+			font-family: ${fontId};
+		}
+
+		check-box {
+			background-color: rgba(45, 49, 50, 1.0);
+			font-family: ${fontId};
+		}
+
+		check-box:hover {
+			background-color: rgba(45, 49, 50, 1.0);
+			color: rgba(2, 214, 171, 1.0);
+		}
+
+		button:hover, sprite-button:hover {
+			background-color: rgba(254, 254, 254, 1.0);
+			background-image: url('holo', 'button_hover');
+		}
+
+		heading {
+			font-family: ${fontId};
+		}
+
+		label, text-area {
+			color: rgba(255, 255, 240, 1.0);
+			font-family: ${fontId};
+		}
+
+		progress-bar {
+			background-color: rgba(45, 49, 50, 1.0);
+			color: rgba(2, 214, 171, 1.0);
+		}
+
+		separator {
+			color: rgba(45, 49, 50, 1.0);
+		}
+
+		slider {
+			background-color: rgba(45, 49, 50, 1.0);
+			color: rgba(255, 255, 240, 1.0);
+		}
+
+		slider:hover {
+			background-color: rgba(45, 49, 50, 1.0);
+			color: rgba(2, 214, 171, 1.0);
+		}
+
+		text-edit:hover {
+			background-color: rgba(45, 49, 50, 1.0);
+			color: rgba(2, 214, 171, 1.0);
+		}
+
+		window {
+			background-color: rgba(254, 254, 254, 1.0);
+			background-image: url('holo', 'window');
+		}`;
 
 		RegisterCommand('veinDemo', function () {
 			isWindowOpened = !isWindowOpened;
