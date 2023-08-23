@@ -15,6 +15,7 @@
 	let isHoloStyle = false;
 	let floatValue = 0;
 	let textValue = '';
+	let selectable = [false, false, false];
 
 	let windowPos = {};
 	let isWindowOpened = false;
@@ -58,6 +59,12 @@
 		drawLabel('ProgressBar');
 
 		vein.progressBar(0, floatValue, 1, controlWidth);
+		vein.endRow();
+
+		vein.beginRow();
+		drawLabel('Selectable');
+
+		for (let i = 0; i < selectable.length; ++i) selectable[i] = vein.selectable(selectable[i], `Item ${i}`);
 		vein.endRow();
 
 		vein.beginRow();
