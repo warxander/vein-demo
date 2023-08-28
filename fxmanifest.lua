@@ -9,4 +9,4 @@ files {
 	'holo/window.png'
 }
 
-client_script 'demo.js'
+client_script '*.js'

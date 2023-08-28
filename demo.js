@@ -43,6 +43,13 @@
 		vein.endRow();
 
 		vein.beginRow();
+		drawLabel('Custom Item');
+
+		RequestStreamedTextureDict('mpweaponscommon_small');
+		inventoryItem('Assault SMG', 'mpweaponscommon_small', 'w_sb_assaultsmg');
+		vein.endRow();
+
+		vein.beginRow();
 		drawLabel('Dummy');
 
 		vein.dummy(controlWidth, 0.059);
@@ -51,8 +58,7 @@
 		vein.beginRow();
 		drawLabel('Label');
 
-		vein.setNextTextEntry('STRING', 'Welcome to Vein');
-		vein.label();
+		vein.label('Welcome to Vein');
 		vein.endRow();
 
 		vein.beginRow();
