@@ -11,22 +11,30 @@
 
 	let holoStyleSheet;
 
-	let checked = false;
+	let isChecked = false;
+	let isCollapsed = true;
 	let isHoloStyle = false;
 	let floatValue = 0;
 	let textValue = '';
 	let selectable = [false, false, false];
 
-	let windowPos = {};
+	let windowState = {};
 	let isWindowOpened = false;
 
 	const showVeinDemo = async function (windowTick) {
 		if (!isWindowOpened) {
 			clearTick(windowTick);
+			windowState = {};
 			return;
 		}
 
-		vein.beginWindow(windowPos.x, windowPos.y);
+		if (!windowState.usedAlready && windowState.rect) {
+			windowState.rect.x = 0.5 - windowState.rect.w / 2;
+			windowState.rect.y = 0.5 - windowState.rect.h / 2;
+			windowState.usedAlready = true;
+		}
+
+		vein.beginWindow(windowState.rect ? windowState.rect.x : null, windowState.rect ? windowState.rect.y : null);
 
 		vein.heading('Heading');
 
@@ -39,8 +47,17 @@
 		vein.beginRow();
 		drawLabel('CheckBox');
 
-		checked = vein.checkBox(checked, 'Secret Mode');
+		isChecked = vein.checkBox(isChecked, 'Secret Mode');
 		vein.endRow();
+
+		vein.beginRow();
+		drawLabel('CollapsingHeader');
+
+		isCollapsed = vein.collapsingHeader(isCollapsed, 'Where is the baby?');
+		vein.endRow();
+		if (!isCollapsed) {
+			vein.heading('There he is!');
+		}
 
 		vein.beginRow();
 		drawLabel('Custom Item');
@@ -116,7 +133,7 @@
 		vein.beginRow();
 		drawLabel('TextEdit');
 
-		const textEditResult = await vein.textEdit(textValue, 'Editing text', 12, checked);
+		const textEditResult = await vein.textEdit(textValue, 'Editing text', 12, isChecked);
 		textValue = textEditResult.text;
 		vein.endRow();
 
@@ -124,7 +141,7 @@
 
 		if (vein.button('Close')) isWindowOpened = false;
 
-		windowPos = vein.endWindow();
+		windowState.rect = vein.endWindow();
 	};
 
 	on('onClientResourceStart', function (resourceName) {
@@ -152,12 +169,12 @@
 			font-family: ${fontId};
 		}
 
-		check-box {
+		check-box, collapsing-header {
 			background-color: rgba(45, 49, 50, 1.0);
 			font-family: ${fontId};
 		}
 
-		check-box:hover {
+		check-box:hover, collapsing-header:hover {
 			background-color: rgba(45, 49, 50, 1.0);
 			color: rgba(2, 214, 171, 1.0);
 		}
