@@ -73,6 +73,12 @@
 		vein.endRow();
 
 		vein.beginRow();
+		drawLabel('Hyperlink');
+
+		vein.hyperlink('https://fivem.net/')
+		vein.endRow();
+
+		vein.beginRow();
 		drawLabel('Label');
 
 		vein.label('Welcome to Vein');
@@ -169,13 +175,21 @@
 			font-family: ${fontId};
 		}
 
-		check-box, collapsing-header {
+		check-box {
 			background-color: rgba(45, 49, 50, 1.0);
 			font-family: ${fontId};
 		}
 
-		check-box:hover, collapsing-header:hover {
+		check-box:hover {
 			background-color: rgba(45, 49, 50, 1.0);
+			color: rgba(2, 214, 171, 1.0);
+		}
+
+		collapsing-header {
+			font-family: ${fontId};
+		}
+
+		collapsing-header:hover {
 			color: rgba(2, 214, 171, 1.0);
 		}
 
@@ -188,6 +202,15 @@
 			font-family: ${fontId};
 		}
 
+		hyperlink {
+			color: rgba(2, 214, 171, 1.0);
+			font-family: ${fontId};
+		}
+
+		hyperlink:hover {
+			color: rgba(22, 253, 206, 1.0);
+		}
+
 		label, text-area {
 			color: rgba(255, 255, 240, 1.0);
 			font-family: ${fontId};
@@ -196,6 +219,16 @@
 		progress-bar {
 			background-color: rgba(45, 49, 50, 1.0);
 			color: rgba(2, 214, 171, 1.0);
+		}
+
+		selectable {
+			accent-color: rgba(2, 214, 171, 1.0);
+			background-color: rgba(0, 0, 0, 0.0);
+			font-family: ${fontId};
+		}
+
+		selectable:hover {
+			background-color: rgba(45, 49, 50, 1.0);
 		}
 
 		separator {
