@@ -10,13 +10,13 @@ const II_SIZE = {
 };
 
 function inventoryItem(text, spriteDict, spriteName) {
-	const ctx = exports.vein.getContext();
+	const ui = exports.vein.getUi();
 
-	ctx.beginItem(II_SIZE.w, II_SIZE.h);
+	ui.beginItem(II_SIZE.w, II_SIZE.h);
 
-	const p = ctx.getPainter();
+	const p = ui.getPainter();
 
-	if (ctx.isItemHovered()) p.setColor(245, 5, 81, 255);
+	if (ui.isItemHovered()) p.setColor(245, 5, 81, 255);
 	else p.setColor(36, 39, 48, 255);
 	p.drawRect(II_SIZE.w, II_SIZE.h);
 
@@ -30,7 +30,7 @@ function inventoryItem(text, spriteDict, spriteName) {
 	p.setColor(255, 255, 240, 255);
 	p.drawText();
 
-	ctx.endItem();
+	ui.endItem();
 
-	return ctx.isItemClicked();
+	return ui.isItemClicked();
 }
