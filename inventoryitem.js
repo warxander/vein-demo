@@ -9,6 +9,11 @@ const II_SIZE = {
 	h: II_GEOMETRY.sprite.h + II_GEOMETRY.label.h + II_GEOMETRY.padding.y * 2
 };
 
+const II_TEXT = {
+	font: 0,
+	scale: 0.25
+};
+
 function inventoryItem(text, spriteDict, spriteName) {
 	const ui = exports.vein.getUi();
 
@@ -25,10 +30,12 @@ function inventoryItem(text, spriteDict, spriteName) {
 	p.drawSprite(spriteDict, spriteName, II_GEOMETRY.sprite.w, II_GEOMETRY.sprite.h);
 	p.move(-II_GEOMETRY.padding.x, -II_GEOMETRY.padding.y);
 
-	p.setText(0, 0.25, text);
-	p.move((II_SIZE.w - p.getTextWidth()) / 2, II_GEOMETRY.sprite.h + II_GEOMETRY.label.h / 2 + II_GEOMETRY.padding.y);
+	p.move(
+		(II_SIZE.w - p.getTextWidth(text, II_TEXT.font, II_TEXT.scale)) / 2,
+		II_GEOMETRY.sprite.h + II_GEOMETRY.label.h / 2 + II_GEOMETRY.padding.y
+	);
 	p.setColor(255, 255, 240, 255);
-	p.drawText();
+	p.drawText(text, II_TEXT.font, II_TEXT.scale);
 
 	ui.endItem();
 
