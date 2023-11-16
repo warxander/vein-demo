@@ -5,8 +5,8 @@ dependency 'vein'
 files {
 	'holo/button_hover.png',
 	'holo/button.png',
-	'holo/light.png',
-	'holo/window.png'
+	'holo/frame_bg.png',
+	'holo/light.png'
 }
 
 client_script '*.js'

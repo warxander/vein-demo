@@ -18,23 +18,32 @@
 	let textValue = '';
 	let selectable = [false, false, false];
 
-	let windowState = {};
-	let isWindowOpened = false;
+	let frameState = {};
+	let isFrameOpened = false;
 
-	const showVeinDemo = async function (windowTick) {
-		if (!isWindowOpened) {
-			clearTick(windowTick);
-			windowState = {};
+	const showVeinDemo = async function (frameTick) {
+		if (!isFrameOpened) {
+			clearTick(frameTick);
+			frameState = {};
 			return;
 		}
 
-		if (!windowState.usedAlready && windowState.rect) {
-			windowState.rect.x = 0.5 - windowState.rect.w / 2;
-			windowState.rect.y = 0.5 - windowState.rect.h / 2;
-			windowState.usedAlready = true;
+		if (!frameState.usedAlready && frameState.rect) {
+			frameState.rect.x = 0.5 - frameState.rect.w / 2;
+			frameState.rect.y = 0.5 - frameState.rect.h / 2;
+			frameState.usedAlready = true;
 		}
 
-		vein.beginWindow(windowState.rect ? windowState.rect.x : null, windowState.rect ? windowState.rect.y : null);
+		if (frameState.scheduleStyleChange) {
+			isHoloStyle = !isHoloStyle;
+			if (!isHoloStyle) {
+				vein.resetStyle();
+				vein.addStyleSheet(getInventoryItemSheetStyle());
+			} else vein.addStyleSheet(holoStyleSheet);
+			frameState.scheduleStyleChange = null;
+		}
+
+		vein.beginFrame(frameState.rect ? frameState.rect.x : null, frameState.rect ? frameState.rect.y : null);
 
 		vein.heading('Heading');
 
@@ -75,7 +84,7 @@
 		vein.beginRow();
 		drawLabel('Hyperlink');
 
-		vein.hyperlink('https://fivem.net/')
+		vein.hyperlink('https://fivem.net/');
 		vein.endRow();
 
 		vein.beginRow();
@@ -120,11 +129,8 @@
 		drawLabel('SpriteButton');
 
 		RequestStreamedTextureDict('mphud');
-		if (vein.spriteButton(isHoloStyle ? 'holo' : 'mphud', isHoloStyle ? 'light' : 'spectating', 'Toggle Style')) {
-			isHoloStyle = !isHoloStyle;
-			if (isHoloStyle) vein.setStyleSheet(holoStyleSheet);
-			else vein.useDefaultStyle();
-		}
+		if (vein.spriteButton(isHoloStyle ? 'holo' : 'mphud', isHoloStyle ? 'light' : 'spectating', 'Toggle Style'))
+			frameState.scheduleStyleChange = true;
 		vein.endRow();
 
 		vein.beginRow();
@@ -145,9 +151,9 @@
 
 		vein.spacing();
 
-		if (vein.button('Close')) isWindowOpened = false;
+		if (vein.button('Close')) isFrameOpened = false;
 
-		windowState.rect = vein.endWindow();
+		frameState.rect = vein.endFrame();
 	};
 
 	on('onClientResourceStart', function (resourceName) {
@@ -157,7 +163,7 @@
 		CreateRuntimeTextureFromImage(txd, 'button', 'holo/button.png');
 		CreateRuntimeTextureFromImage(txd, 'button_hover', 'holo/button_hover.png');
 		CreateRuntimeTextureFromImage(txd, 'light', 'holo/light.png');
-		CreateRuntimeTextureFromImage(txd, 'window', 'holo/window.png');
+		CreateRuntimeTextureFromImage(txd, 'frame_bg', 'holo/frame_bg.png');
 		RequestStreamedTextureDict('holo');
 
 		const fontFileName = 'roboto';
@@ -173,6 +179,11 @@
 			background-color: rgba(254, 254, 254, 1.0);
 			background-image: url('holo', 'button');
 			font-family: ${fontId};
+		}
+
+		button:hover, sprite-button:hover {
+			background-color: rgba(254, 254, 254, 1.0);
+			background-image: url('holo', 'button_hover');
 		}
 
 		check-box {
@@ -193,9 +204,9 @@
 			color: rgba(2, 214, 171, 1.0);
 		}
 
-		button:hover, sprite-button:hover {
+		frame {
 			background-color: rgba(254, 254, 254, 1.0);
-			background-image: url('holo', 'button_hover');
+			background-image: url('holo', 'frame_bg');
 		}
 
 		heading {
@@ -209,6 +220,16 @@
 
 		hyperlink:hover {
 			color: rgba(22, 253, 206, 1.0);
+		}
+
+		inventory-item {
+			background-color: rgba(45, 49, 50, 1.0);
+			font-family: ${fontId};
+		}
+
+		inventory-item:hover {
+			background-color: rgba(45, 49, 50, 1.0);
+			color: rgba(2, 214, 171, 1.0);
 		}
 
 		label, text-area {
@@ -248,18 +269,15 @@
 		text-edit:hover {
 			background-color: rgba(45, 49, 50, 1.0);
 			color: rgba(2, 214, 171, 1.0);
-		}
-
-		window {
-			background-color: rgba(254, 254, 254, 1.0);
-			background-image: url('holo', 'window');
 		}`;
 
+		vein.addStyleSheet(getInventoryItemSheetStyle());
+
 		RegisterCommand('veinDemo', function () {
-			isWindowOpened = !isWindowOpened;
-			if (isWindowOpened) {
-				const windowTick = setTick(async function () {
-					await showVeinDemo(windowTick);
+			isFrameOpened = !isFrameOpened;
+			if (isFrameOpened) {
+				const frameTick = setTick(async function () {
+					await showVeinDemo(frameTick);
 				});
 			}
 		});
