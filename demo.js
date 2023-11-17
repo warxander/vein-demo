@@ -9,6 +9,8 @@
 		vein.label(text);
 	};
 
+	let isFrameOpened = false;
+
 	let holoStyleSheet;
 
 	let isChecked = false;
@@ -18,32 +20,36 @@
 	let textValue = '';
 	let selectable = [false, false, false];
 
-	let frameState = {};
-	let isFrameOpened = false;
+	let frameResponse = {};
+	let usedAlready = false;
+	let scheduleStyleChange = false;
 
 	const showVeinDemo = async function (frameTick) {
 		if (!isFrameOpened) {
 			clearTick(frameTick);
-			frameState = {};
+			frameResponse = {};
+			usedAlready = false;
+			scheduleStyleChange = false;
 			return;
 		}
 
-		if (!frameState.usedAlready && frameState.rect) {
-			frameState.rect.x = 0.5 - frameState.rect.w / 2;
-			frameState.rect.y = 0.5 - frameState.rect.h / 2;
-			frameState.usedAlready = true;
+		if (!usedAlready && frameResponse.rect) {
+			vein.setNextFramePosition(0.5 - frameResponse.rect.w / 2, 0.5 - frameResponse.rect.h / 2);
+			usedAlready = true;
 		}
 
-		if (frameState.scheduleStyleChange) {
+		if (scheduleStyleChange) {
 			isHoloStyle = !isHoloStyle;
+
 			if (!isHoloStyle) {
 				vein.resetStyle();
 				vein.addStyleSheet(getInventoryItemSheetStyle());
 			} else vein.addStyleSheet(holoStyleSheet);
-			frameState.scheduleStyleChange = null;
+
+			scheduleStyleChange = false;
 		}
 
-		vein.beginFrame(frameState.rect ? frameState.rect.x : null, frameState.rect ? frameState.rect.y : null);
+		vein.beginFrame('veinDemo');
 
 		vein.heading('Heading');
 
@@ -130,7 +136,7 @@
 
 		RequestStreamedTextureDict('mphud');
 		if (vein.spriteButton(isHoloStyle ? 'holo' : 'mphud', isHoloStyle ? 'light' : 'spectating', 'Toggle Style'))
-			frameState.scheduleStyleChange = true;
+			scheduleStyleChange = true;
 		vein.endRow();
 
 		vein.beginRow();
@@ -153,7 +159,7 @@
 
 		if (vein.button('Close')) isFrameOpened = false;
 
-		frameState.rect = vein.endFrame();
+		frameResponse = vein.endFrame();
 	};
 
 	on('onClientResourceStart', function (resourceName) {
