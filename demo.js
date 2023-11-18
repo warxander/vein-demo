@@ -84,7 +84,7 @@
 		vein.beginRow();
 		drawLabel('Dummy');
 
-		vein.dummy(controlWidth, 0.059);
+		vein.dummy(controlWidth, 0.035);
 		vein.endRow();
 
 		vein.beginRow();
