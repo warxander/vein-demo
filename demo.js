@@ -102,7 +102,7 @@
 		vein.beginRow();
 		drawLabel('ProgressBar');
 
-		vein.progressBar(0, floatValue, 1, controlWidth);
+		vein.progressBar(floatValue, 0, 1, controlWidth);
 		vein.endRow();
 
 		vein.beginRow();
@@ -120,7 +120,7 @@
 		vein.beginRow();
 		drawLabel('Slider');
 
-		const sliderResult = vein.slider(0, floatValue, 1, controlWidth);
+		const sliderResult = vein.slider(floatValue, 0, 1, controlWidth);
 		floatValue = sliderResult.value;
 		vein.endRow();
 
@@ -263,13 +263,15 @@
 		}
 
 		slider {
+			accent-color: rgba(255, 255, 240, 1.0);
 			background-color: rgba(45, 49, 50, 1.0);
 			color: rgba(255, 255, 240, 1.0);
+			font-family: ${fontId};
 		}
 
 		slider:hover {
+			accent-color: rgba(2, 214, 171, 1.0);
 			background-color: rgba(45, 49, 50, 1.0);
-			color: rgba(2, 214, 171, 1.0);
 		}
 
 		text-edit:hover {
