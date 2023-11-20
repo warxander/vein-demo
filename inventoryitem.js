@@ -18,7 +18,7 @@ function getInventoryItemSheetStyle() {
 	}
 
 	inventory-item:hover {
-		background-color: #F50551;
+		background-color: #F21951;
 	}`;
 }
 
