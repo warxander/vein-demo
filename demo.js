@@ -78,7 +78,12 @@
 		drawLabel('Custom Item');
 
 		RequestStreamedTextureDict('mpweaponscommon_small');
-		inventoryItem('Assault SMG', 'mpweaponscommon_small', 'w_sb_assaultsmg');
+		if (inventoryItem('Assault SMG', 'mpweaponscommon_small', 'w_sb_assaultsmg', GetHashKey('weapon_assaultsmg'))) {
+			BeginTextCommandThefeedPost('STRING');
+			AddTextComponentString('Assault SMG');
+			EndTextCommandThefeedPostTicker(true, true);
+		}
+
 		vein.endRow();
 
 		vein.beginRow();
