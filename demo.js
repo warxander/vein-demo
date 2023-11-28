@@ -107,7 +107,7 @@
 		vein.beginRow();
 		drawLabel('ProgressBar');
 
-		vein.progressBar(floatValue, 0, 1, controlWidth);
+		vein.progressBar(floatValue, controlWidth);
 		vein.endRow();
 
 		vein.beginRow();
@@ -125,8 +125,7 @@
 		vein.beginRow();
 		drawLabel('Slider');
 
-		const sliderResult = vein.slider(floatValue, 0, 1, controlWidth);
-		floatValue = sliderResult.value;
+		floatValue = vein.slider(floatValue, 0, 1, controlWidth);
 		vein.endRow();
 
 		vein.beginRow();
@@ -156,8 +155,7 @@
 		vein.beginRow();
 		drawLabel('TextEdit');
 
-		const textEditResult = await vein.textEdit(textValue, 'Editing text', 12, isChecked);
-		textValue = textEditResult.text;
+		textValue = await vein.textEdit(textValue, 'Editing text', 12, isChecked);
 		vein.endRow();
 
 		vein.spacing();
