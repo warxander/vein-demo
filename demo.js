@@ -1,6 +1,4 @@
 (function () {
-	const vein = exports.vein;
-
 	const controlWidth = 0.133;
 	const labelWidth = 0.1;
 
@@ -9,70 +7,62 @@
 		vein.label(text);
 	};
 
-	let isFrameOpened = false;
+	let vein = null;
+	let holoStyleSheet = null;
 
-	let holoStyleSheet;
+	let isDemoOpened = false;
 
-	let isChecked = false;
-	let isCollapsed = true;
-	let isHoloStyle = false;
-	let floatValue = 0;
-	let textValue = '';
-	let selectable = [false, false, false];
+	let itemsFrameState = {};
+	let optionsFrameState = {};
 
-	let frameResponse = {};
-	let usedAlready = false;
-	let scheduleStyleChange = false;
+	async function showItemsFrame() {
+		if (!itemsFrameState.selectables) itemsFrameState.selectables = [false, false, false];
+		if (!itemsFrameState.floatValue) itemsFrameState.floatValue = 0;
+		if (!itemsFrameState.textValue) itemsFrameState.textValue = '';
 
-	const showVeinDemo = async function (frameTick) {
-		if (!isFrameOpened) {
-			clearTick(frameTick);
-			frameResponse = {};
-			usedAlready = false;
-			scheduleStyleChange = false;
-			return;
+		if (!itemsFrameState.positionInitialized && itemsFrameState.response) {
+			vein.setNextFramePosition(
+				0.5 - itemsFrameState.response.rect.w / 2,
+				0.5 - itemsFrameState.response.rect.h / 2
+			);
+			itemsFrameState.positionInitialized = true;
 		}
 
-		if (!usedAlready && frameResponse.rect) {
-			vein.setNextFramePosition(0.5 - frameResponse.rect.w / 2, 0.5 - frameResponse.rect.h / 2);
-			usedAlready = true;
-		}
+		vein.setNextFrameSpacing(itemsFrameState.horizontalSpacing, itemsFrameState.verticalSpacing);
+		vein.setNextFrameScale(itemsFrameState.scale);
+		if (itemsFrameState.disableBackground) vein.setNextFrameDisableBackground();
+		if (itemsFrameState.disableBorder) vein.setNextFrameDisableBorder();
+		if (itemsFrameState.disableInput) vein.setNextFrameDisableInput();
+		if (itemsFrameState.disableMove) vein.setNextFrameDisableMove();
 
-		if (scheduleStyleChange) {
-			isHoloStyle = !isHoloStyle;
+		if (itemsFrameState.scheduleStyleChange) {
+			itemsFrameState.isHoloStyle = !itemsFrameState.isHoloStyle;
 
-			if (!isHoloStyle) {
+			if (!itemsFrameState.isHoloStyle) {
 				vein.resetStyle();
 				vein.addStyleSheet(getInventoryItemSheetStyle());
 			} else vein.addStyleSheet(holoStyleSheet);
 
-			scheduleStyleChange = false;
+			itemsFrameState.scheduleStyleChange = false;
 		}
 
-		vein.beginFrame('veinDemo');
+		vein.beginFrame('veinItems');
 
 		vein.heading('Heading');
 
 		vein.beginRow();
-		drawLabel('Button');
+		vein.pushItemWidth(labelWidth);
+		vein.label('Button');
+		vein.popItemWidth();
 
-		if (vein.button('Toggle Debug')) vein.setDebugEnabled(!vein.isDebugEnabled());
+		if (vein.button('Click Me')) itemsFrameState.isChecked = !itemsFrameState.isChecked;
 		vein.endRow();
 
 		vein.beginRow();
 		drawLabel('CheckBox');
 
-		isChecked = vein.checkBox(isChecked, 'Secret Mode');
+		itemsFrameState.isChecked = vein.checkBox(itemsFrameState.isChecked, 'Secret Mode');
 		vein.endRow();
-
-		vein.beginRow();
-		drawLabel('CollapsingHeader');
-
-		isCollapsed = vein.collapsingHeader(isCollapsed, 'Where is the baby?');
-		vein.endRow();
-		if (!isCollapsed) {
-			vein.heading('There he is!');
-		}
 
 		vein.beginRow();
 		drawLabel('Custom Item');
@@ -83,7 +73,6 @@
 			AddTextComponentString('Assault SMG');
 			EndTextCommandThefeedPostTicker(true, true);
 		}
-
 		vein.endRow();
 
 		vein.beginRow();
@@ -107,13 +96,14 @@
 		vein.beginRow();
 		drawLabel('ProgressBar');
 
-		vein.progressBar(floatValue, controlWidth);
+		vein.progressBar(itemsFrameState.floatValue, controlWidth);
 		vein.endRow();
 
 		vein.beginRow();
 		drawLabel('Selectable');
 
-		for (let i = 0; i < selectable.length; ++i) selectable[i] = vein.selectable(selectable[i], `Item ${i}`);
+		for (let i = 0; i < itemsFrameState.selectables.length; ++i)
+			itemsFrameState.selectables[i] = vein.selectable(itemsFrameState.selectables[i], `Item ${i}`);
 		vein.endRow();
 
 		vein.beginRow();
@@ -125,7 +115,7 @@
 		vein.beginRow();
 		drawLabel('Slider');
 
-		floatValue = vein.slider(floatValue, 0, 1, controlWidth);
+		itemsFrameState.floatValue = vein.slider(itemsFrameState.floatValue, 0, 1, controlWidth);
 		vein.endRow();
 
 		vein.beginRow();
@@ -139,8 +129,14 @@
 		drawLabel('SpriteButton');
 
 		RequestStreamedTextureDict('mphud');
-		if (vein.spriteButton(isHoloStyle ? 'holo' : 'mphud', isHoloStyle ? 'light' : 'spectating', 'Toggle Style'))
-			scheduleStyleChange = true;
+		if (
+			vein.spriteButton(
+				itemsFrameState.isHoloStyle ? 'holo' : 'mphud',
+				itemsFrameState.isHoloStyle ? 'light' : 'spectating',
+				'Toggle Style'
+			)
+		)
+			itemsFrameState.scheduleStyleChange = true;
 		vein.endRow();
 
 		vein.beginRow();
@@ -155,18 +151,82 @@
 		vein.beginRow();
 		drawLabel('TextEdit');
 
-		textValue = await vein.textEdit(textValue, 'Editing text', 12, isChecked);
+		itemsFrameState.textValue = await vein.textEdit(
+			itemsFrameState.textValue,
+			'Editing text',
+			12,
+			itemsFrameState.isChecked
+		);
 		vein.endRow();
 
-		vein.spacing();
+		itemsFrameState.response = vein.endFrame();
+	}
 
-		if (vein.button('Close')) isFrameOpened = false;
+	function showOptionsFrame() {
+		if (!itemsFrameState.horizontalSpacing) itemsFrameState.horizontalSpacing = 0.005;
+		if (!itemsFrameState.verticalSpacing) itemsFrameState.verticalSpacing = 0.01;
+		if (!itemsFrameState.scale) itemsFrameState.scale = 1.0;
 
-		frameResponse = vein.endFrame();
-	};
+		if (!optionsFrameState.alreadyShown) {
+			vein.setNextFramePosition(0.65, 0.15);
+			optionsFrameState.alreadyShown = true;
+		}
+
+		vein.beginFrame('veinOptions');
+
+		const isDebugEnabled = vein.isDebugEnabled();
+		if (vein.checkBox(isDebugEnabled, 'Toggle Debug') !== isDebugEnabled) vein.setDebugEnabled(!isDebugEnabled);
+
+		optionsFrameState.frameOptionsOpened = vein.collapsingHeader(
+			optionsFrameState.frameOptionsOpened,
+			'Frame Options'
+		);
+		if (optionsFrameState.frameOptionsOpened) {
+			RequestStreamedTextureDict('mpleaderboard');
+
+			vein.beginRow();
+			vein.label('Horizontal Spacing');
+			itemsFrameState.horizontalSpacing = vein.slider(
+				itemsFrameState.horizontalSpacing,
+				0,
+				0.01,
+				0.1,
+				itemsFrameState.horizontalSpacing.toFixed(3)
+			);
+			if (vein.spriteButton('mpleaderboard', 'leaderboard_lap_icon')) itemsFrameState.horizontalSpacing = null;
+			vein.endRow();
+
+			vein.beginRow();
+			vein.label('Vertical Spacing');
+			itemsFrameState.verticalSpacing = vein.slider(
+				itemsFrameState.verticalSpacing,
+				0,
+				0.05,
+				0.1,
+				itemsFrameState.verticalSpacing.toFixed(3)
+			);
+			if (vein.spriteButton('mpleaderboard', 'leaderboard_lap_icon')) itemsFrameState.verticalSpacing = null;
+			vein.endRow();
+
+			vein.beginRow();
+			vein.label('Scale');
+			itemsFrameState.scale = vein.slider(itemsFrameState.scale, 0.7, 1.3, 0.1);
+			if (vein.spriteButton('mpleaderboard', 'leaderboard_lap_icon')) itemsFrameState.scale = null;
+			vein.endRow();
+
+			itemsFrameState.disableBackground = vein.checkBox(itemsFrameState.disableBackground, 'Disable Background');
+			itemsFrameState.disableBorder = vein.checkBox(itemsFrameState.disableBorder, 'Disable Border');
+			itemsFrameState.disableInput = vein.checkBox(itemsFrameState.disableInput, 'Disable Input');
+			itemsFrameState.disableMove = vein.checkBox(itemsFrameState.disableMove, 'Disable Move');
+		}
+
+		vein.endFrame();
+	}
 
 	on('onClientResourceStart', function (resourceName) {
 		if (resourceName != GetCurrentResourceName()) return;
+
+		vein = exports.vein;
 
 		const txd = CreateRuntimeTxd('holo');
 		CreateRuntimeTextureFromImage(txd, 'button', 'holo/button.png');
@@ -285,10 +345,18 @@
 		vein.addStyleSheet(getInventoryItemSheetStyle());
 
 		RegisterCommand('veinDemo', function () {
-			isFrameOpened = !isFrameOpened;
-			if (isFrameOpened) {
+			isDemoOpened = !isDemoOpened;
+			if (isDemoOpened) {
 				const frameTick = setTick(async function () {
-					await showVeinDemo(frameTick);
+					if (!isDemoOpened) {
+						clearTick(frameTick);
+						itemsFrameState = {};
+						optionsFrameState = {};
+						return;
+					}
+
+					showOptionsFrame();
+					await showItemsFrame();
 				});
 			}
 		});

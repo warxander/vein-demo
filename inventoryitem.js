@@ -1,13 +1,13 @@
 /* Item constants */
-const II_GEOMETRY = {
+const II_STYLE = {
 	sprite: { w: 0.05, h: 0.044 },
 	padding: { x: 0.005, y: 0.005 },
 	label: { h: 0.035 }
 };
 
 const II_SIZE = {
-	w: II_GEOMETRY.sprite.w + II_GEOMETRY.padding.x * 2,
-	h: II_GEOMETRY.sprite.h + II_GEOMETRY.label.h + II_GEOMETRY.padding.y * 2
+	w: II_STYLE.sprite.w + II_STYLE.padding.x * 2,
+	h: II_STYLE.sprite.h + II_STYLE.label.h + II_STYLE.padding.y * 2
 };
 
 /* For default style */
@@ -48,10 +48,10 @@ function inventoryItem(text, spriteDict, spriteName, weaponHash) {
 	p.drawRect(II_SIZE.w, II_SIZE.h);
 
 	/* Sprite */
-	p.move(II_GEOMETRY.padding.x, II_GEOMETRY.padding.y);
+	p.move(II_STYLE.padding.x, II_STYLE.padding.y);
 	p.setColor(254, 254, 254, 255);
-	p.drawSprite(spriteDict, spriteName, II_GEOMETRY.sprite.w, II_GEOMETRY.sprite.h);
-	p.move(-II_GEOMETRY.padding.x, -II_GEOMETRY.padding.y);
+	p.drawSprite(spriteDict, spriteName, II_STYLE.sprite.w, II_STYLE.sprite.h);
+	p.move(-II_STYLE.padding.x, -II_STYLE.padding.y);
 
 	/* Text */
 	const font = frame.getStyleProperty(selector, 'font-family');
@@ -59,7 +59,7 @@ function inventoryItem(text, spriteDict, spriteName, weaponHash) {
 
 	p.move(
 		(II_SIZE.w - p.getTextWidth(text, font, scale)) / 2,
-		II_GEOMETRY.sprite.h + II_GEOMETRY.label.h / 2 + II_GEOMETRY.padding.y
+		II_STYLE.sprite.h + II_STYLE.label.h / 2 + II_STYLE.padding.y
 	);
 
 	const color = frame.getStyleProperty(selector, 'color');
