@@ -20,11 +20,8 @@
 		if (!itemsFrameState.floatValue) itemsFrameState.floatValue = 0;
 		if (!itemsFrameState.textValue) itemsFrameState.textValue = '';
 
-		if (!itemsFrameState.positionInitialized && itemsFrameState.response) {
-			vein.setNextFramePosition(
-				0.5 - itemsFrameState.response.rect.w / 2,
-				0.5 - itemsFrameState.response.rect.h / 2
-			);
+		if (!itemsFrameState.positionInitialized && itemsFrameState.rect) {
+			vein.setNextFramePosition(0.5 - itemsFrameState.rect.w / 2, 0.5 - itemsFrameState.rect.h / 2);
 			itemsFrameState.positionInitialized = true;
 		}
 
@@ -159,7 +156,7 @@
 		);
 		vein.endRow();
 
-		itemsFrameState.response = vein.endFrame();
+		itemsFrameState.rect = vein.endFrame();
 	}
 
 	function showOptionsFrame() {
