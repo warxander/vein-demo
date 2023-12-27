@@ -52,12 +52,14 @@
 		vein.label('Button');
 		vein.popItemWidth();
 
+		if (itemsFrameState.disableItems) vein.setNextItemDisabled();
 		if (vein.button('Click Me')) itemsFrameState.isChecked = !itemsFrameState.isChecked;
 		vein.endRow();
 
 		vein.beginRow();
 		drawLabel('CheckBox');
 
+		if (itemsFrameState.disableItems) vein.setNextItemDisabled();
 		itemsFrameState.isChecked = vein.checkBox(itemsFrameState.isChecked, 'Secret Mode');
 		vein.endRow();
 
@@ -65,6 +67,7 @@
 		drawLabel('Custom Item');
 
 		RequestStreamedTextureDict('mpweaponscommon_small');
+		if (itemsFrameState.disableItems) vein.setNextItemDisabled();
 		if (inventoryItem('Assault SMG', 'mpweaponscommon_small', 'w_sb_assaultsmg', GetHashKey('weapon_assaultsmg'))) {
 			BeginTextCommandThefeedPost('STRING');
 			AddTextComponentString('Assault SMG');
@@ -81,6 +84,7 @@
 		vein.beginRow();
 		drawLabel('Hyperlink');
 
+		if (itemsFrameState.disableItems) vein.setNextItemDisabled();
 		vein.hyperlink('https://fivem.net/');
 		vein.endRow();
 
@@ -99,8 +103,10 @@
 		vein.beginRow();
 		drawLabel('Selectable');
 
-		for (let i = 0; i < itemsFrameState.selectables.length; ++i)
+		for (let i = 0; i < itemsFrameState.selectables.length; ++i) {
+			if (itemsFrameState.disableItems) vein.setNextItemDisabled();
 			itemsFrameState.selectables[i] = vein.selectable(itemsFrameState.selectables[i], `Item ${i}`);
+		}
 		vein.endRow();
 
 		vein.beginRow();
@@ -112,6 +118,7 @@
 		vein.beginRow();
 		drawLabel('Slider');
 
+		if (itemsFrameState.disableItems) vein.setNextItemDisabled();
 		itemsFrameState.floatValue = vein.slider(itemsFrameState.floatValue, 0, 1, controlWidth);
 		vein.endRow();
 
@@ -126,6 +133,7 @@
 		drawLabel('SpriteButton');
 
 		RequestStreamedTextureDict('mphud');
+		if (itemsFrameState.disableItems) vein.setNextItemDisabled();
 		if (
 			vein.spriteButton(
 				itemsFrameState.isHoloStyle ? 'holo' : 'mphud',
@@ -148,6 +156,7 @@
 		vein.beginRow();
 		drawLabel('TextEdit');
 
+		if (itemsFrameState.disableItems) vein.setNextItemDisabled();
 		itemsFrameState.textValue = await vein.textEdit(
 			itemsFrameState.textValue,
 			'Editing text',
@@ -215,6 +224,7 @@
 			itemsFrameState.disableBorder = vein.checkBox(itemsFrameState.disableBorder, 'Disable Border');
 			itemsFrameState.disableInput = vein.checkBox(itemsFrameState.disableInput, 'Disable Input');
 			itemsFrameState.disableMove = vein.checkBox(itemsFrameState.disableMove, 'Disable Move');
+			itemsFrameState.disableItems = vein.checkBox(itemsFrameState.disableItems, 'Disable Items');
 		}
 
 		vein.endFrame();
@@ -236,6 +246,7 @@
 		RegisterFontFile(fontFileName);
 		const fontId = RegisterFontId(fontFileName);
 
+		// TODO: Redefine all selectors and states
 		holoStyleSheet = `text-edit {
 			background-color: rgba(45, 49, 50, 1.0);
 			font-family: ${fontId};

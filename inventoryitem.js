@@ -16,7 +16,15 @@ function getInventoryItemSheetStyle() {
 		background-color: #242730;
 		color: #FFFFF0;
 		font-family: 0;
-		font-size: 0.25em;
+		font-size: 0.25;
+	}
+
+	inventory-item:active {
+		background-color: #893240;
+	}
+
+	inventory-item:disabled {
+		color: #4F5259;
 	}
 
 	inventory-item:hover {
@@ -38,7 +46,10 @@ function inventoryItem(text, spriteDict, spriteName, weaponHash) {
 	/* 3. Draw item */
 
 	/* Declare selector by considering user-defined styleId and item state */
-	const selector = frame.buildStyleSelector('inventory-item', frame.isItemHovered() ? 'hover' : null);
+	const selector = frame.buildStyleSelector(
+		'inventory-item',
+		frame.isItemDisabled() ? 'disabled' : frame.isItemPressed() ? 'active' : frame.isItemHovered() ? 'hover' : null
+	);
 
 	const p = frame.getPainter();
 
