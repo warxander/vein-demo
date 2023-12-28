@@ -68,7 +68,9 @@
 
 		RequestStreamedTextureDict('mpweaponscommon_small');
 		if (itemsFrameState.disableItems) vein.setNextItemDisabled();
-		if (inventoryItem('Assault SMG', 'mpweaponscommon_small', 'w_sb_assaultsmg', GetHashKey('weapon_assaultsmg'))) {
+		if (inventoryItem('Assault SMG', 'mpweaponscommon_small', 'w_sb_assaultsmg')) {
+			GiveWeaponToPed(PlayerPedId(), GetHashKey('weapon_assaultsmg'), 9999, false, true);
+
 			BeginTextCommandThefeedPost('STRING');
 			AddTextComponentString('Assault SMG');
 			EndTextCommandThefeedPostTicker(true, true);

@@ -32,7 +32,7 @@ function getInventoryItemSheetStyle() {
 	}`;
 }
 
-function inventoryItem(text, spriteDict, spriteName, weaponHash) {
+function inventoryItem(text, spriteDict, spriteName) {
 	/* Get currently processing frame (window) */
 	const frame = exports.vein.getFrame();
 
@@ -41,7 +41,6 @@ function inventoryItem(text, spriteDict, spriteName, weaponHash) {
 
 	/* 2. Process user input */
 	const isClicked = frame.isItemClicked();
-	if (isClicked) GiveWeaponToPed(PlayerPedId(), weaponHash, 9999, false, true);
 
 	/* 3. Draw item */
 
