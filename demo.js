@@ -161,7 +161,8 @@
 			itemsFrameState.textValue,
 			'Editing text',
 			12,
-			itemsFrameState.isChecked
+			itemsFrameState.isChecked,
+			'Search...'
 		);
 		vein.endRow();
 
