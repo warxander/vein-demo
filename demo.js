@@ -47,23 +47,23 @@
 
 		vein.heading('Heading');
 
-		vein.beginRow();
-		vein.pushItemWidth(labelWidth);
+		vein.beginHorizontal();
+		vein.beginVertical(labelWidth);
 		vein.label('Button');
-		vein.popItemWidth();
+		vein.endVertical();
 
 		if (itemsFrameState.disableItems) vein.setNextItemDisabled();
 		if (vein.button('Click Me')) itemsFrameState.isChecked = !itemsFrameState.isChecked;
-		vein.endRow();
+		vein.endHorizontal();
 
-		vein.beginRow();
+		vein.beginHorizontal();
 		drawLabel('CheckBox');
 
 		if (itemsFrameState.disableItems) vein.setNextItemDisabled();
 		itemsFrameState.isChecked = vein.checkBox(itemsFrameState.isChecked, 'Secret Mode');
-		vein.endRow();
+		vein.endHorizontal();
 
-		vein.beginRow();
+		vein.beginHorizontal();
 		drawLabel('Custom Item');
 
 		RequestStreamedTextureDict('mpweaponscommon_small');
@@ -75,63 +75,63 @@
 			AddTextComponentString('Assault SMG');
 			EndTextCommandThefeedPostTicker(true, true);
 		}
-		vein.endRow();
+		vein.endHorizontal();
 
-		vein.beginRow();
+		vein.beginHorizontal();
 		drawLabel('Dummy');
 
 		vein.dummy(controlWidth, 0.035);
-		vein.endRow();
+		vein.endHorizontal();
 
-		vein.beginRow();
+		vein.beginHorizontal();
 		drawLabel('Hyperlink');
 
 		if (itemsFrameState.disableItems) vein.setNextItemDisabled();
 		vein.hyperlink('https://fivem.net/');
-		vein.endRow();
+		vein.endHorizontal();
 
-		vein.beginRow();
+		vein.beginHorizontal();
 		drawLabel('Label');
 
 		vein.label('Welcome to Vein');
-		vein.endRow();
+		vein.endHorizontal();
 
-		vein.beginRow();
+		vein.beginHorizontal();
 		drawLabel('ProgressBar');
 
 		vein.progressBar(itemsFrameState.floatValue, controlWidth);
-		vein.endRow();
+		vein.endHorizontal();
 
-		vein.beginRow();
+		vein.beginHorizontal();
 		drawLabel('Selectable');
 
 		for (let i = 0; i < itemsFrameState.selectables.length; ++i) {
 			if (itemsFrameState.disableItems) vein.setNextItemDisabled();
 			itemsFrameState.selectables[i] = vein.selectable(itemsFrameState.selectables[i], `Item ${i}`);
 		}
-		vein.endRow();
+		vein.endHorizontal();
 
-		vein.beginRow();
+		vein.beginHorizontal();
 		drawLabel('Separator');
 
 		vein.separator(controlWidth);
-		vein.endRow();
+		vein.endHorizontal();
 
-		vein.beginRow();
+		vein.beginHorizontal();
 		drawLabel('Slider');
 
 		if (itemsFrameState.disableItems) vein.setNextItemDisabled();
 		itemsFrameState.floatValue = vein.slider(itemsFrameState.floatValue, 0, 1, controlWidth);
-		vein.endRow();
+		vein.endHorizontal();
 
-		vein.beginRow();
+		vein.beginHorizontal();
 		drawLabel('Sprite');
 
 		RequestStreamedTextureDict('shopui_title_barber3');
 		vein.sprite('shopui_title_barber3', 'shopui_title_barber3', controlWidth, 0.059);
-		vein.endRow();
+		vein.endHorizontal();
 
-		vein.beginRow();
+		vein.beginHorizontal();
 		drawLabel('SpriteButton');
 
 		RequestStreamedTextureDict('mphud');
@@ -144,18 +144,18 @@
 			)
 		)
 			itemsFrameState.scheduleStyleChange = true;
-		vein.endRow();
+		vein.endHorizontal();
 
-		vein.beginRow();
+		vein.beginHorizontal();
 		drawLabel('TextArea');
 
 		vein.textArea(
 			'FiveM is the original community-driven and source-available GTA V multiplayer modification project.',
 			controlWidth
 		);
-		vein.endRow();
+		vein.endHorizontal();
 
-		vein.beginRow();
+		vein.beginHorizontal();
 		drawLabel('TextEdit');
 
 		if (itemsFrameState.disableItems) vein.setNextItemDisabled();
@@ -166,7 +166,7 @@
 			itemsFrameState.isChecked,
 			'Search...'
 		);
-		vein.endRow();
+		vein.endHorizontal();
 
 		itemsFrameState.rect = vein.endFrame();
 	}
@@ -193,7 +193,7 @@
 		if (optionsFrameState.frameOptionsOpened) {
 			RequestStreamedTextureDict('mpleaderboard');
 
-			vein.beginRow();
+			vein.beginHorizontal();
 			vein.label('Horizontal Spacing');
 			itemsFrameState.horizontalSpacing = vein.slider(
 				itemsFrameState.horizontalSpacing,
@@ -203,9 +203,9 @@
 				itemsFrameState.horizontalSpacing.toFixed(3)
 			);
 			if (vein.spriteButton('mpleaderboard', 'leaderboard_lap_icon')) itemsFrameState.horizontalSpacing = null;
-			vein.endRow();
+			vein.endHorizontal();
 
-			vein.beginRow();
+			vein.beginHorizontal();
 			vein.label('Vertical Spacing');
 			itemsFrameState.verticalSpacing = vein.slider(
 				itemsFrameState.verticalSpacing,
@@ -215,13 +215,13 @@
 				itemsFrameState.verticalSpacing.toFixed(3)
 			);
 			if (vein.spriteButton('mpleaderboard', 'leaderboard_lap_icon')) itemsFrameState.verticalSpacing = null;
-			vein.endRow();
+			vein.endHorizontal();
 
-			vein.beginRow();
+			vein.beginHorizontal();
 			vein.label('Scale');
 			itemsFrameState.scale = vein.slider(itemsFrameState.scale, 0.7, 1.3, 0.1);
 			if (vein.spriteButton('mpleaderboard', 'leaderboard_lap_icon')) itemsFrameState.scale = null;
-			vein.endRow();
+			vein.endHorizontal();
 
 			itemsFrameState.disableBackground = vein.checkBox(itemsFrameState.disableBackground, 'Disable Background');
 			itemsFrameState.disableBorder = vein.checkBox(itemsFrameState.disableBorder, 'Disable Border');
