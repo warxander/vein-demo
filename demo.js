@@ -183,6 +183,15 @@
 
 		vein.beginFrame('veinOptions');
 
+		RequestStreamedTextureDict('mpmissmarkers256');
+		const controlHeight = controlWidth * GetAspectRatio();
+		const customX = 0.65;
+		const customY = 0.65;
+		vein.setNextItemPosition(customX, customY);
+		vein.rect(controlWidth, controlHeight, 0, 0, 0, 64);
+		vein.setNextItemPosition(customX, customY);
+		vein.sprite('mpmissmarkers256', 'arm_wrestling_icon', controlWidth, controlHeight, 255, 255, 255, 64);
+
 		const isDebugEnabled = vein.isDebugEnabled();
 		if (vein.checkBox(isDebugEnabled, 'Toggle Debug') !== isDebugEnabled) vein.setDebugEnabled(!isDebugEnabled);
 
