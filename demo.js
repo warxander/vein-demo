@@ -107,6 +107,7 @@
 
 		for (let i = 0; i < itemsFrameState.selectables.length; ++i) {
 			if (itemsFrameState.disableItems) vein.setNextItemDisabled();
+			if (i !== 0) vein.setNextItemSpacing(0.001);
 			itemsFrameState.selectables[i] = vein.selectable(itemsFrameState.selectables[i], `Item ${i}`);
 		}
 		vein.endHorizontal();
@@ -172,8 +173,8 @@
 	}
 
 	function showOptionsFrame() {
-		if (!itemsFrameState.horizontalSpacing) itemsFrameState.horizontalSpacing = 0.005;
-		if (!itemsFrameState.verticalSpacing) itemsFrameState.verticalSpacing = 0.01;
+		if (!itemsFrameState.horizontalSpacing) itemsFrameState.horizontalSpacing = 0.004;
+		if (!itemsFrameState.verticalSpacing) itemsFrameState.verticalSpacing = 0.0071;
 		if (!itemsFrameState.scale) itemsFrameState.scale = 1.0;
 
 		if (!optionsFrameState.alreadyShown) {
@@ -182,6 +183,8 @@
 		}
 
 		vein.beginFrame('veinOptions');
+
+		const spacing = vein.getFrame().getSpacing();
 
 		RequestStreamedTextureDict('mpmissmarkers256');
 		const controlHeight = controlWidth * GetAspectRatio();
@@ -231,6 +234,8 @@
 			itemsFrameState.scale = vein.slider(itemsFrameState.scale, 0.7, 1.3, 0.1);
 			if (vein.spriteButton('mpleaderboard', 'leaderboard_lap_icon')) itemsFrameState.scale = null;
 			vein.endHorizontal();
+
+			vein.setNextItemSpacing(spacing.y * 2);
 
 			itemsFrameState.disableBackground = vein.checkBox(itemsFrameState.disableBackground, 'Disable Background');
 			itemsFrameState.disableBorder = vein.checkBox(itemsFrameState.disableBorder, 'Disable Border');
