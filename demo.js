@@ -160,13 +160,14 @@
 		drawLabel('TextEdit');
 
 		if (itemsFrameState.disableItems) vein.setNextItemDisabled();
-		itemsFrameState.textValue = await vein.textEdit(
+		const textValue = await vein.textEdit(
 			itemsFrameState.textValue,
 			'Editing text',
 			12,
 			itemsFrameState.isChecked,
 			'Search...'
 		);
+		if (textValue) itemsFrameState.textValue = textValue;
 		vein.endHorizontal();
 
 		itemsFrameState.rect = vein.endFrame();
