@@ -1,6 +1,7 @@
 (function () {
 	const controlWidth = 0.133;
 	const labelWidth = 0.1;
+	const dndItems = ['mp_specitem_package', 'mp_specitem_keycard', 'mp_specitem_remote'];
 
 	const drawLabel = function (text) {
 		vein.setNextItemWidth(labelWidth);
@@ -75,6 +76,44 @@
 			AddTextComponentString('Assault SMG');
 			EndTextCommandThefeedPostTicker(true, true);
 		}
+		vein.endHorizontal();
+
+		vein.beginHorizontal();
+		drawLabel('Drag & Drop');
+
+		RequestStreamedTextureDict('mpinventory');
+		for (let i = 0; i < dndItems.length; ++i) {
+			vein.spriteButton('mpinventory', dndItems[i]);
+
+			const payload = vein.getItemDragPayload();
+			if (payload && i === parseInt(payload)) {
+				const itemRect = vein.getFrame().getLayout().getItemRect();
+				vein.setNextItemPosition(itemRect.x, itemRect.y);
+				vein.rect(itemRect.w, itemRect.h, 0, 0, 0, 128);
+			}
+
+			if (vein.beginItemDrag(`veinDemo_dnd_${i}`)) {
+				if (vein.isItemDragged()) vein.setItemDragPayload(i.toString());
+
+				vein.spriteButton('mpinventory', dndItems[parseInt(vein.getItemDragPayload())]);
+
+				vein.endItemDrag();
+			}
+
+			if (vein.beginItemDrop()) {
+				const itemRect = vein.getFrame().getLayout().getItemRect();
+				vein.setNextItemPosition(itemRect.x, itemRect.y);
+				vein.rect(itemRect.w, itemRect.h, 34, 176, 77, 128);
+
+				if (vein.isItemDropped()) {
+					const sourceIndex = parseInt(vein.getItemDragPayload());
+					[dndItems[sourceIndex], dndItems[i]] = [dndItems[i], dndItems[sourceIndex]];
+				}
+
+				vein.endItemDrop();
+			}
+		}
+
 		vein.endHorizontal();
 
 		vein.beginHorizontal();
