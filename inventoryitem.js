@@ -1,13 +1,13 @@
 /* Item constants */
-const II_STYLE = {
+const STYLE = {
 	sprite: { w: 0.05, h: 0.044 },
 	padding: { x: 0.005, y: 0.005 },
 	label: { h: 0.035 }
 };
 
-const II_SIZE = {
-	w: II_STYLE.sprite.w + II_STYLE.padding.x * 2,
-	h: II_STYLE.sprite.h + II_STYLE.label.h + II_STYLE.padding.y * 2
+const SIZE = {
+	w: STYLE.sprite.w + STYLE.padding.x * 2,
+	h: STYLE.sprite.h + STYLE.label.h + STYLE.padding.y * 2
 };
 
 /* For default style */
@@ -35,9 +35,10 @@ function getInventoryItemSheetStyle() {
 function inventoryItem(text, spriteDict, spriteName) {
 	/* Get currently processing frame (window) */
 	const frame = exports.vein.getFrame();
+	const style = frame.getStyle();
 
 	/* 1. Decide item size and begin it */
-	frame.beginItem(II_SIZE.w, II_SIZE.h);
+	frame.beginItem(SIZE.w, SIZE.h);
 
 	/* 2. Process user input */
 	const isClicked = frame.isItemClicked();
@@ -45,7 +46,7 @@ function inventoryItem(text, spriteDict, spriteName) {
 	/* 3. Draw item */
 
 	/* Declare selector by considering user-defined styleId and item state */
-	const selector = frame.buildStyleSelector(
+	const selector = frame.buildItemStyleSelector(
 		'inventory-item',
 		frame.isItemDisabled() ? 'disabled' : frame.isItemPressed() ? 'active' : frame.isItemHovered() ? 'hover' : null
 	);
@@ -53,26 +54,26 @@ function inventoryItem(text, spriteDict, spriteName) {
 	const p = frame.getPainter();
 
 	/* Background */
-	const backgroundColor = frame.getStyleProperty(selector, 'background-color');
+	const backgroundColor = style.getProperty(selector, 'background-color');
 	p.setColor(backgroundColor[0], backgroundColor[1], backgroundColor[2], backgroundColor[3]);
-	p.drawRect(II_SIZE.w, II_SIZE.h);
+	p.drawRect(SIZE.w, SIZE.h);
 
 	/* Sprite */
-	p.move(II_STYLE.padding.x, II_STYLE.padding.y);
+	p.move(STYLE.padding.x, STYLE.padding.y);
 	p.setColor(254, 254, 254, 255);
-	p.drawSprite(spriteDict, spriteName, II_STYLE.sprite.w, II_STYLE.sprite.h);
-	p.move(-II_STYLE.padding.x, -II_STYLE.padding.y);
+	p.drawSprite(spriteDict, spriteName, STYLE.sprite.w, STYLE.sprite.h);
+	p.move(-STYLE.padding.x, -STYLE.padding.y);
 
 	/* Text */
-	const font = frame.getStyleProperty(selector, 'font-family');
-	const scale = frame.getStyleProperty(selector, 'font-size');
+	const font = style.getProperty(selector, 'font-family');
+	const scale = style.getProperty(selector, 'font-size');
 
 	p.move(
-		(II_SIZE.w - p.getTextWidth(text, font, scale)) / 2,
-		II_STYLE.sprite.h + II_STYLE.label.h / 2 + II_STYLE.padding.y
+		(SIZE.w - p.getTextWidth(text, font, scale)) / 2,
+		STYLE.sprite.h + STYLE.label.h / 2 + STYLE.padding.y
 	);
 
-	const color = frame.getStyleProperty(selector, 'color');
+	const color = style.getProperty(selector, 'color');
 	p.setColor(color[0], color[1], color[2], color[3]);
 	p.drawText(text, font, scale);
 

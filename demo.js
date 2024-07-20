@@ -83,6 +83,7 @@
 
 		RequestStreamedTextureDict('mpinventory');
 		for (let i = 0; i < dndItems.length; ++i) {
+			if (itemsFrameState.disableItems) vein.setNextItemDisabled();
 			vein.spriteButton('mpinventory', dndItems[i]);
 
 			const payload = vein.getItemDragPayload();
